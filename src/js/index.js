@@ -13,6 +13,17 @@ const playerImage = document.getElementById('player-image-container');
 
 const enemyHealthContainer = document.getElementById('enemy-health-container');
 const enemyImageContainer = document.getElementById('enemy-image-container');
+const enemyHealthBar = document.createElement('h4');
+const enemyImage = document.createElement('img');
+
+const itemBagContainer = document.createElement('div');
+const itemHeadline = document.createElement('h3');
+
+const fightButtons = document.createElement('div');
+const buttonA = document.createElement('button');
+const buttonB = document.createElement('button');
+const buttonC = document.createElement('button');
+const buttonD = document.createElement('button');
 
 const fightbuttonsContainer = document.getElementById(
   'fight-buttons-container'
@@ -40,6 +51,8 @@ let state = {
   isInBattle: false,
 };
 
+let enemyState = {};
+
 // PLAYER
 class Player {
   constructor(name) {
@@ -48,10 +61,17 @@ class Player {
     this.kills = 0;
     this.deaths = 0;
     this.fights = 0;
+    this.mana = 0;
     this.level = 1;
     this.image =
       'https://migrainecanada.org/wp-content/uploads/2019/07/occipital_nerves.jpg';
-    this.items = [];
+    this.items = [
+      {
+        name: 'Potion ',
+        desc: 'Health plus 10 ',
+        quantity: 10
+      },
+    ];
     this.weapons = [];
   }
 }
@@ -80,25 +100,51 @@ const enemiesList = [
     image: 'https://images.stockfreeimages.com/857/sfixl/8579385.jpg',
   },
 ];
+// SPELLS
+
+class Spell {
+  constructor({ name, damage, image }) {
+    this.name = name;
+    this.damage = damage;
+    this.image = image;
+  }
+}
+const spellsAvailable = [
+    {
+    name: 'Fireball',
+    damage: 10,
+    image: `🔥`
+    }
+]
 
 // ITEMS
 class Item {
-  constructor({ name }) {
+  constructor({ name, desc, use }) {
     this.name = name;
+    this.desc = desc;
+    this.use = use;
   }
 }
 const itemsAvailable = [
   {
-    name: 'Knife',
+    name: 'Bone',
+    desc: 'It was free',
+    use: +10,
   },
   {
-    name: 'Sword',
+    name: 'Potion',
+    desc: 'Health plus 10',
+    use: +10,
   },
   {
     name: 'Cheese',
+    desc: 'Delicious treat',
+    use: +10,
   },
   {
     name: 'Phoenix Down',
+    desc: 'Restores health from 0 to 20 in battle',
+    use: +10,
   },
 ];
 
@@ -132,7 +178,6 @@ const weaponsAvailable = [
 const newCharacter = new Player((this.name = 'Tom'));
 
 function startGame() {
-  console.log('newCharacter: ', newCharacter);
 }
 
 function setPlayerData() {
@@ -159,8 +204,7 @@ function setStartingItems(newCharacter) {
   const newItem = new Item(
     itemsAvailable[randomIndexGenerator(itemsAvailable.length)]
   );
-  console.log('newItem', newItem);
-
+  newItem.quantity = 1;
   newCharacter.items.push(newItem);
 }
 
@@ -168,7 +212,6 @@ function setStartingWeapons(newCharacter) {
   const newWeapon = new Weapon(
     weaponsAvailable[randomIndexGenerator(weaponsAvailable.length)]
   );
-  console.log('newWeapon', newWeapon);
 
   newCharacter.weapons.push(newWeapon);
 }
@@ -188,21 +231,16 @@ function startNextTurn() {
   }
 
   createEnemyElements(newEnemy);
-
-
-  
 }
 
 function createEnemyElements(newEnemy) {
-  console.log('newEnemy', newEnemy);
 
-  const enemyImage = document.createElement('img');
   enemyImage.setAttribute('src', newEnemy.image);
   enemyImage.setAttribute('alt', newEnemy.name);
   enemyImage.setAttribute('class', 'enemy-image');
   enemyContainer.appendChild(enemyImage);
 
-  const enemyHealthBar = document.createElement('h4');
+  enemyHealthBar.setAttribute('id', 'enemy-health-bar');
   enemyHealthBar.setAttribute('class', 'enemy-health-bar');
   enemyHealthBar.innerText = `Enemy Health: ${newEnemy.health}`;
   enemyHealthContainer.appendChild(enemyHealthBar);
@@ -210,118 +248,138 @@ function createEnemyElements(newEnemy) {
 // produces an instance of the enemy rerturns new enemy
 function spawnNewEnemy() {
   if (randomNumberGenerator(10) > 5) {
-    state.isInBattle = true
-    spawnCombatButtons()
+    state.isInBattle = true;
+    spawnCombatButtons();
     const newEnemy = new EnemyCreature(
       enemiesList[randomIndexGenerator(enemiesList.length)]
     );
+
+    enemyState = newEnemy;
     return newEnemy;
   }
 }
 
 function spawnCombatButtons() {
-    const fightButtons = document.createElement('div');
-    fightButtons.id = 'fight-buttons';
-    fightbuttonsContainer.appendChild(fightButtons);
+  fightButtons.id = 'fight-buttons';
+  fightbuttonsContainer.appendChild(fightButtons);
 
-    const buttonA = document.createElement('button');
-    buttonA.setAttribute('class', 'gameBtn');
-    buttonA.innerText = `Attack`;
-    buttonA.onclick = () => attack();
+  buttonA.setAttribute('class', 'gameBtn');
+  buttonA.innerText = `Attack`;
+  buttonA.onclick = () => attack();
 
-    const buttonB = document.createElement('button');
-    buttonB.setAttribute('class', 'gameBtn');
-    buttonB.innerText = `Magic`;
-    buttonB.onclick = () => magic();
+  buttonB.setAttribute('class', 'gameBtn');
+  buttonB.innerText = `Magic`;
+  buttonB.onclick = () => magic();
 
-    const buttonC = document.createElement('button');
-    buttonC.setAttribute('class', 'gameBtn');
-    buttonC.innerText = `Items`;
-    buttonC.onclick = () => items();
+  buttonC.setAttribute('class', 'gameBtn');
+  buttonC.innerText = `Items`;
+  buttonC.onclick = () => items();
 
-    const buttonD = document.createElement('button');
-    buttonD.setAttribute('class', 'gameBtn');
-    buttonD.innerText = `Run`;
-    buttonD.onclick = () => runAway();
+  buttonD.setAttribute('class', 'gameBtn');
+  buttonD.innerText = `Run`;
+  buttonD.onclick = () => runAway();
 
-    fightButtons.appendChild(buttonA);
-    fightButtons.appendChild(buttonB);
-    fightButtons.appendChild(buttonC);
-    fightButtons.appendChild(buttonD);
+  fightButtons.appendChild(buttonA);
+  fightButtons.appendChild(buttonB);
+  fightButtons.appendChild(buttonC);
+  fightButtons.appendChild(buttonD);
 }
 
+function winEnemyBattle() {
+  enemyImage.remove();
+  enemyHealthBar.remove();
+  fightButtons.remove();
+  state.isInBattle = false;
+  state.isCurrentTurn = false;
+  newCharacter.kills++;
+  newCharacter.fights++;
+  refreshStats();
+}
 // 4 Button options
-const attack = (newEnemy) => {
-    console.log('attack');
-    console.log('newEnemyxxx', newEnemy);
-    updateStats();
-  };
-  
-  const magic = () => {
-    console.log('magic');
-  };
-  
-  const items = () => {
-    console.log('items');
-    openItemBag();
-  };
-  const runAway = () => {
-    console.log('run');
-  };
+const attack = () => {
+  console.log('attack');
+
+  let randomAttackDamage = randomNumberGenerator(5);
+  enemyState.health = enemyState.health - randomAttackDamage;
+  attachRefresh();
+};
+
+const magic = () => {
+  console.log('magic');
+};
+const items = () => {
+  openItemBag();
+};
+const runAway = () => {
+  console.log('run');
+};
 
 function openItemBag() {
-  console.log('opening bag', state.isItemBagOpen);
 
-    if (state.isItemBagOpen === true) {
-        return
-    }
+  if (state.isItemBagOpen === true) {
+    return;
+  }
 
   state.isItemBagOpen = true;
 
-  const itemBagContainer = document.createElement('div');
   itemBagContainer.id = 'item-bag-container';
   itemBagContainer.setAttribute('class', 'item-bag');
   mainContainer.appendChild(itemBagContainer);
-
-  const itemHeadline = document.createElement('h3');
+  
   itemHeadline.innerText = 'Items';
   itemBagContainer.appendChild(itemHeadline);
-
+  
   const itemUl = document.createElement('ul');
   itemBagContainer.appendChild(itemUl);
 
   newCharacter.items.forEach((item, index) => {
+
+    const listP = document.createElement('p');
+    const useItemButton = document.createElement('button');
+
     const itemLi = document.createElement('li');
     itemLi.setAttribute('class', 'list-item');
     itemUl.appendChild(itemLi);
 
-    const listP = document.createElement('p');
-    listP.innerText = item.name + '  ' + ' Qty: ' + item.quantity;
+    listP.innerText = item.name + `Quantity: ` + item.quantity;
+
     itemLi.appendChild(listP);
 
-    const useButton = document.createElement('button');
-    useButton.innerText = 'USE';
-    itemLi.appendChild(useButton);
+    useItemButton.innerText = 'USE';
+    itemLi.appendChild(useItemButton);
   });
 
   const closeButton = document.createElement('button');
-  closeButton.setAttribute('class', 'btn')
+  closeButton.setAttribute('class', 'btn');
   closeButton.setAttribute('class', 'close-btn');
   closeButton.innerText = 'Close';
   closeButton.addEventListener('click', () => {
-    itemBagContainer.remove()
-    state.isItemBagOpen = false
-  })
+    itemBagContainer.remove();
+    state.isItemBagOpen = false;
+  });
   itemBagContainer.appendChild(closeButton);
+}
+
+function useBagItem(item) {
+  console.log('item activated', item);
 }
 
 function setStartingLevel() {
   let i = state.level - 1;
-  console.log('i', i);
   const imageTag = document.createElement('img');
   imageTag.setAttribute('src', levelLocations[i].image);
   imageTag.setAttribute('class', 'level-image');
   levelContainer.appendChild(imageTag);
+}
+
+function attachRefresh() {
+  enemyHealthBar.innerText = `Enemy Health: ${enemyState.health}`;
+  if (enemyState.health <= 1 && newCharacter.health > 0) winEnemyBattle();
+}
+
+function refreshStats() {
+  playerhealthBar.innerText = `Health: ${newCharacter.health}`;
+  playerkillBar.innerText = `Kills: ${newCharacter.kills}`;
 }
 
 function run() {
