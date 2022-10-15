@@ -434,6 +434,7 @@ function setInvintoryItems() {
 
   newCharacter.items.forEach((item, index) => {
     const listP = document.createElement('p');
+    listP.id = 'listP-item'
     const useItemButton = document.createElement('button');
 
     const itemLi = document.createElement('li');
@@ -467,8 +468,14 @@ function setInvintoryItems() {
 function useInvintoryItem(item) {
   console.log('item activated', item);
 
+  if (item.quantity <= 0) {
+    return console.log('out of stock');
+  }
+
   if (item.type === 'heal') {
     newCharacter.health = newCharacter.health + item.use
+    item.quantity--
+    refreshInvintory(item)
     return refreshStats()
   }
 }
@@ -489,6 +496,13 @@ function attachRefresh() {
 function refreshStats() {
   playerhealthBar.innerText = `Health: ${newCharacter.health}`;
   playerkillBar.innerText = `Kills: ${newCharacter.kills}`;
+}
+
+function refreshInvintory(item) {
+    console.log('refreshing invintory');
+    let listP = document.getElementById('listP-item')
+    listP.innerText = item.name + `Quantity: ` + item.quantity;
+
 }
 
 function startingConditions() {
