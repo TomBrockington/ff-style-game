@@ -69,7 +69,7 @@ class Player {
       {
         name: 'Potion ',
         desc: 'Health plus 10 ',
-        quantity: 10
+        quantity: 10,
       },
     ];
     this.weapons = [];
@@ -110,12 +110,12 @@ class Spell {
   }
 }
 const spellsAvailable = [
-    {
+  {
     name: 'Fireball',
     damage: 10,
-    image: `🔥`
-    }
-]
+    image: `🔥`,
+  },
+];
 
 // ITEMS
 class Item {
@@ -177,8 +177,7 @@ const weaponsAvailable = [
 // Stat of Game
 const newCharacter = new Player((this.name = 'Tom'));
 
-function startGame() {
-}
+function startGame() {}
 
 function setPlayerData() {
   setPlayerImage(newCharacter);
@@ -234,7 +233,6 @@ function startNextTurn() {
 }
 
 function createEnemyElements(newEnemy) {
-
   enemyImage.setAttribute('src', newEnemy.image);
   enemyImage.setAttribute('alt', newEnemy.name);
   enemyImage.setAttribute('class', 'enemy-image');
@@ -315,25 +313,31 @@ const runAway = () => {
 };
 
 function openItemBag() {
+  console.log('state.isItemBagOpen', state.isItemBagOpen);
+  state.isItemBagOpen = !state.isItemBagOpen;
 
   if (state.isItemBagOpen === true) {
-    return;
+    itemBagContainer.style.display = 'none';
   }
 
-  state.isItemBagOpen = true;
+  if (state.isItemBagOpen === false) {
+    itemBagContainer.style.display = 'block';
+  }
+}
 
+function setInvintoryItems() {
   itemBagContainer.id = 'item-bag-container';
   itemBagContainer.setAttribute('class', 'item-bag');
+  itemBagContainer.style.display = 'none';
   mainContainer.appendChild(itemBagContainer);
-  
+
   itemHeadline.innerText = 'Items';
   itemBagContainer.appendChild(itemHeadline);
-  
+
   const itemUl = document.createElement('ul');
   itemBagContainer.appendChild(itemUl);
 
   newCharacter.items.forEach((item, index) => {
-
     const listP = document.createElement('p');
     const useItemButton = document.createElement('button');
 
@@ -354,8 +358,8 @@ function openItemBag() {
   closeButton.setAttribute('class', 'close-btn');
   closeButton.innerText = 'Close';
   closeButton.addEventListener('click', () => {
-    itemBagContainer.remove();
-    state.isItemBagOpen = false;
+    itemBagContainer.style.display = 'none';
+
   });
   itemBagContainer.appendChild(closeButton);
 }
@@ -385,6 +389,7 @@ function refreshStats() {
 function run() {
   setPlayerData();
   setStartingLevel();
+  setInvintoryItems();
   startGame();
 }
 
