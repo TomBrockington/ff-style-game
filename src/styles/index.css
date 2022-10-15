@@ -22,7 +22,6 @@
   place-content: center;
   position: relative;
   border-radius: 12px;
-  border: 2px solid black;
 }
 
 .level-image {
@@ -39,7 +38,7 @@
 #nextTurn {
   display: flex;
   justify-content: center;
-  padding: 1rem;
+  padding-top: 1rem;
 }
 
 #nextTurn button {
@@ -70,11 +69,9 @@
   position: absolute;
   bottom: 10px;
   left: 20px;
-  border: 2px solid black;
-  border-radius: 12px;
 }
 
-.player-image-container img {
+.player-image {
   width: 100%;
   height: 300px;
   border-radius: 12px;
@@ -89,12 +86,20 @@
   height: auto;
   margin-top: 1rem;
   padding: 1rem;
+  position: relative;
   display: grid;
 }
 
 .list-item {
   display: flex;
   gap: 2rem;
+}
+
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 0.5rem;
 }
 
 /* BUTTONS */
@@ -106,6 +111,11 @@
   margin-top: 1rem;
 }
 
+#fight-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .btn {
   width: 100px;
 }
@@ -113,7 +123,7 @@
 .gameBtn {
   height: 35px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ENEMY INFO */
@@ -121,28 +131,33 @@
 .enemy-image-container {
   width: 500px;
   height: 300px;
+  z-index: 1;
+}
+
+.enemy-image {
+  width: 500px;
+  height: 300px;
   border: 2px solid black;
   border-radius: 12px;
   position: absolute;
   right: 50px;
   top: 50px;
-  z-index: 1;
-}
-
-.enemy-image img {
-  width: 500px;
-  height: 300px;
 }
 
 .enemy-health-container {
-  border: 2px solid black;
-  border-radius: 12px;
   height: 50px;
   width: 300px;
   position: absolute;
-  bottom: 20px;
-  right: 80px;
+  bottom: 60px;
+  right: 140px;
   display: grid;
   place-content: center;
   font-size: 2rem;
+}
+
+.enemy-health-bar {
+  background: lightsalmon;
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
 }

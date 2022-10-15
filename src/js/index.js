@@ -34,9 +34,11 @@ const randomIndexGenerator = (number) => {
 };
 
 let state = {
-    openItemBag: false,
-    isCurrentTurn: false,
-}
+  level: 1,
+  isItemBagOpen: false,
+  isCurrentTurn: false,
+  isInBattle: false,
+};
 
 // PLAYER
 class Player {
@@ -47,7 +49,8 @@ class Player {
     this.deaths = 0;
     this.fights = 0;
     this.level = 1;
-    this.image = '';
+    this.image =
+      'https://migrainecanada.org/wp-content/uploads/2019/07/occipital_nerves.jpg';
     this.items = [];
     this.weapons = [];
   }
@@ -62,7 +65,6 @@ class EnemyCreature {
     this.image = image;
   }
 }
-
 const enemiesList = [
   {
     name: 'Dragon',
@@ -79,14 +81,12 @@ const enemiesList = [
   },
 ];
 
-
 // ITEMS
 class Item {
   constructor({ name }) {
     this.name = name;
   }
 }
-
 const itemsAvailable = [
   {
     name: 'Knife',
@@ -101,10 +101,6 @@ const itemsAvailable = [
     name: 'Phoenix Down',
   },
 ];
-const newItem = new Item(
-  itemsAvailable[randomIndexGenerator(itemsAvailable.length)]
-);
-console.log('newItem: ', newItem);
 
 // LEVELS
 const levelLocations = [
@@ -131,37 +127,207 @@ const weaponsAvailable = [
       'https://media.istockphoto.com/photos/sword-disposed-by-diagonal-picture-id630052480?k=20&m=630052480&s=612x612&w=0&h=FPu6qhzFivQuHltu4zcH0DA2M7LRBr3rsoUodk8laJ0=',
   },
 ];
-const newWeapon = new Weapon(
-  weaponsAvailable[randomIndexGenerator(weaponsAvailable.length)]
-);
-console.log('newWeapon', newWeapon);
 
-
-const newCharacter = new Player(this.name = 'Tom');
+// Stat of Game
+const newCharacter = new Player((this.name = 'Tom'));
 
 function startGame() {
-  console.log('Game started');
   console.log('newCharacter: ', newCharacter);
 }
 
-if (newCharacter.health <= 0) {
-    alert('Youre dead!')
+function setPlayerData() {
+  setPlayerImage(newCharacter);
+  setPlayerStats(newCharacter);
+  setStartingItems(newCharacter);
+  setStartingWeapons(newCharacter);
+}
+
+function setPlayerImage(newCharacter) {
+  const playerImg = document.createElement('img');
+  playerImg.setAttribute('src', newCharacter.image);
+  playerImg.setAttribute('class', 'player-image');
+  playerImage.appendChild(playerImg);
+}
+
+function setPlayerStats(newCharacter) {
+  playerName.innerText = `Name: ${newCharacter.name}`;
+  playerhealthBar.innerText = `Health: ${newCharacter.health}`;
+  playerkillBar.innerText = `Kills: ${newCharacter.kills}`;
+}
+
+function setStartingItems(newCharacter) {
+  const newItem = new Item(
+    itemsAvailable[randomIndexGenerator(itemsAvailable.length)]
+  );
+  console.log('newItem', newItem);
+
+  newCharacter.items.push(newItem);
+}
+
+function setStartingWeapons(newCharacter) {
+  const newWeapon = new Weapon(
+    weaponsAvailable[randomIndexGenerator(weaponsAvailable.length)]
+  );
+  console.log('newWeapon', newWeapon);
+
+  newCharacter.weapons.push(newWeapon);
 }
 
 function startNextTurn() {
-    if (state.isCurrentTurn === true) {
+  if (state.isCurrentTurn === true) {
+    return;
+  }
+  state.isCurrentTurn = true;
+  console.log('next turn');
+
+  let newEnemy = spawnNewEnemy();
+
+  if (!newEnemy) {
+    state.isCurrentTurn = false;
+    return console.log('no enemies');
+  }
+
+  createEnemyElements(newEnemy);
+
+
+  
+}
+
+function createEnemyElements(newEnemy) {
+  console.log('newEnemy', newEnemy);
+
+  const enemyImage = document.createElement('img');
+  enemyImage.setAttribute('src', newEnemy.image);
+  enemyImage.setAttribute('alt', newEnemy.name);
+  enemyImage.setAttribute('class', 'enemy-image');
+  enemyContainer.appendChild(enemyImage);
+
+  const enemyHealthBar = document.createElement('h4');
+  enemyHealthBar.setAttribute('class', 'enemy-health-bar');
+  enemyHealthBar.innerText = `Enemy Health: ${newEnemy.health}`;
+  enemyHealthContainer.appendChild(enemyHealthBar);
+}
+// produces an instance of the enemy rerturns new enemy
+function spawnNewEnemy() {
+  if (randomNumberGenerator(10) > 5) {
+    state.isInBattle = true
+    spawnCombatButtons()
+    const newEnemy = new EnemyCreature(
+      enemiesList[randomIndexGenerator(enemiesList.length)]
+    );
+    return newEnemy;
+  }
+}
+
+function spawnCombatButtons() {
+    const fightButtons = document.createElement('div');
+    fightButtons.id = 'fight-buttons';
+    fightbuttonsContainer.appendChild(fightButtons);
+
+    const buttonA = document.createElement('button');
+    buttonA.setAttribute('class', 'gameBtn');
+    buttonA.innerText = `Attack`;
+    buttonA.onclick = () => attack();
+
+    const buttonB = document.createElement('button');
+    buttonB.setAttribute('class', 'gameBtn');
+    buttonB.innerText = `Magic`;
+    buttonB.onclick = () => magic();
+
+    const buttonC = document.createElement('button');
+    buttonC.setAttribute('class', 'gameBtn');
+    buttonC.innerText = `Items`;
+    buttonC.onclick = () => items();
+
+    const buttonD = document.createElement('button');
+    buttonD.setAttribute('class', 'gameBtn');
+    buttonD.innerText = `Run`;
+    buttonD.onclick = () => runAway();
+
+    fightButtons.appendChild(buttonA);
+    fightButtons.appendChild(buttonB);
+    fightButtons.appendChild(buttonC);
+    fightButtons.appendChild(buttonD);
+}
+
+// 4 Button options
+const attack = (newEnemy) => {
+    console.log('attack');
+    console.log('newEnemyxxx', newEnemy);
+    updateStats();
+  };
+  
+  const magic = () => {
+    console.log('magic');
+  };
+  
+  const items = () => {
+    console.log('items');
+    openItemBag();
+  };
+  const runAway = () => {
+    console.log('run');
+  };
+
+function openItemBag() {
+  console.log('opening bag', state.isItemBagOpen);
+
+    if (state.isItemBagOpen === true) {
         return
     }
-    state.isCurrentTurn = true;
 
-    const newEnemy = new EnemyCreature(
-        enemiesList[randomIndexGenerator(enemiesList.length)]
-      );
-      console.log('newEnemy: ', newEnemy);
+  state.isItemBagOpen = true;
+
+  const itemBagContainer = document.createElement('div');
+  itemBagContainer.id = 'item-bag-container';
+  itemBagContainer.setAttribute('class', 'item-bag');
+  mainContainer.appendChild(itemBagContainer);
+
+  const itemHeadline = document.createElement('h3');
+  itemHeadline.innerText = 'Items';
+  itemBagContainer.appendChild(itemHeadline);
+
+  const itemUl = document.createElement('ul');
+  itemBagContainer.appendChild(itemUl);
+
+  newCharacter.items.forEach((item, index) => {
+    const itemLi = document.createElement('li');
+    itemLi.setAttribute('class', 'list-item');
+    itemUl.appendChild(itemLi);
+
+    const listP = document.createElement('p');
+    listP.innerText = item.name + '  ' + ' Qty: ' + item.quantity;
+    itemLi.appendChild(listP);
+
+    const useButton = document.createElement('button');
+    useButton.innerText = 'USE';
+    itemLi.appendChild(useButton);
+  });
+
+  const closeButton = document.createElement('button');
+  closeButton.setAttribute('class', 'btn')
+  closeButton.setAttribute('class', 'close-btn');
+  closeButton.innerText = 'Close';
+  closeButton.addEventListener('click', () => {
+    itemBagContainer.remove()
+    state.isItemBagOpen = false
+  })
+  itemBagContainer.appendChild(closeButton);
+}
+
+function setStartingLevel() {
+  let i = state.level - 1;
+  console.log('i', i);
+  const imageTag = document.createElement('img');
+  imageTag.setAttribute('src', levelLocations[i].image);
+  imageTag.setAttribute('class', 'level-image');
+  levelContainer.appendChild(imageTag);
 }
 
 function run() {
+  setPlayerData();
+  setStartingLevel();
   startGame();
 }
 
-run()
+run();
