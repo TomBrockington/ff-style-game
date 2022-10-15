@@ -66,11 +66,21 @@ class Player {
     this.image =
       'https://migrainecanada.org/wp-content/uploads/2019/07/occipital_nerves.jpg';
     this.items = [
-      {
-        name: 'Potion ',
-        desc: 'Health plus 10 ',
-        quantity: 10,
-      },
+        {
+            name: 'Potion',
+            desc: 'Health plus 10',
+            type: 'heal',
+            use: 10,
+            quantity: 10
+          },
+          {
+            name: 'Cheese',
+            desc: 'Delicious treat',
+            type: 'food',
+            use: 10,
+            quantity: 10
+
+          },
     ];
     this.weapons = [
       {
@@ -164,9 +174,10 @@ const spellsAvailable = [
 
 // ITEMS
 class Item {
-  constructor({ name, desc, use }) {
+  constructor({ name, desc, type, use }) {
     this.name = name;
     this.desc = desc;
+    this.type = type;
     this.use = use;
   }
 }
@@ -174,22 +185,26 @@ const itemsAvailable = [
   {
     name: 'Bone',
     desc: 'It was free',
-    use: +10,
+    type: 'junk',
+    use: 10,
   },
   {
     name: 'Potion',
     desc: 'Health plus 10',
-    use: +10,
+    type: 'heal',
+    use: 10,
   },
   {
     name: 'Cheese',
     desc: 'Delicious treat',
-    use: +10,
+    type: 'food',
+    use: 10,
   },
   {
     name: 'Phoenix Down',
     desc: 'Restores health from 0 to 20 in battle',
-    use: +10,
+    type: 'heal',
+    use: 10,
   },
 ];
 
@@ -393,7 +408,6 @@ const runAway = () => {
 };
 
 function openItemBag() {
-  console.log('state.isItemBagOpen', state.isItemBagOpen);
 
   if (state.isItemBagOpen === true) {
     itemBagContainer.style.display = 'none';
@@ -405,6 +419,7 @@ function openItemBag() {
   state.isItemBagOpen = !state.isItemBagOpen;
 }
 
+// BUILD INVINTORY 
 function setInvintoryItems() {
   itemBagContainer.id = 'item-bag-container';
   itemBagContainer.setAttribute('class', 'item-bag');
@@ -429,7 +444,12 @@ function setInvintoryItems() {
 
     itemLi.appendChild(listP);
 
+    // USE ITEM BUTTON
     useItemButton.innerText = 'USE';
+    useItemButton.onclick = () => { 
+        useInvintoryItem(item)
+    }
+
     itemLi.appendChild(useItemButton);
   });
 
@@ -444,8 +464,13 @@ function setInvintoryItems() {
   itemBagContainer.appendChild(closeButton);
 }
 
-function useBagItem(item) {
+function useInvintoryItem(item) {
   console.log('item activated', item);
+
+  if (item.type === 'heal') {
+    newCharacter.health = newCharacter.health + item.use
+    return refreshStats()
+  }
 }
 
 function setStartingLevel() {
