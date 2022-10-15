@@ -10,6 +10,7 @@ const playerStatsContainer = document.getElementById('player-stats-container');
 const playerhealthBar = document.getElementById('player-health-bar');
 const playerkillBar = document.getElementById('player-kill-bar');
 const playerImage = document.getElementById('player-image-container');
+const nameInputContainer = document.getElementById('player-setname-container');
 
 const enemyHealthContainer = document.getElementById('enemy-health-container');
 const enemyImageContainer = document.getElementById('enemy-image-container');
@@ -61,7 +62,6 @@ class Player {
     this.kills = 0;
     this.deaths = 0;
     this.fights = 0;
-    this.mana = 0;
     this.level = 1;
     this.image =
       'https://migrainecanada.org/wp-content/uploads/2019/07/occipital_nerves.jpg';
@@ -72,7 +72,38 @@ class Player {
         quantity: 10,
       },
     ];
-    this.weapons = [];
+    this.weapons = [
+      {
+        name: 'Mega Sword',
+        strength: +5,
+        image: `🗡️`,
+      },
+      {
+        name: 'Bow and Arrow',
+        strength: +8,
+        image: `🏹`,
+      },
+    ];
+    this.magic = [
+      {
+        name: 'Fireball',
+        damage: 10,
+        image: `🔥`,
+        type: 'fire',
+      },
+      {
+        name: 'Blizzard',
+        damage: 8,
+        image: `❄️`,
+        type: 'ice',
+      },
+      {
+        name: 'Thunder',
+        damage: 13,
+        image: `⚡`,
+        type: 'lightning',
+      },
+    ];
   }
 }
 
@@ -103,10 +134,11 @@ const enemiesList = [
 // SPELLS
 
 class Spell {
-  constructor({ name, damage, image }) {
+  constructor({ name, damage, image, type }) {
     this.name = name;
     this.damage = damage;
     this.image = image;
+    this.type = type;
   }
 }
 const spellsAvailable = [
@@ -114,6 +146,19 @@ const spellsAvailable = [
     name: 'Fireball',
     damage: 10,
     image: `🔥`,
+    type: 'fire',
+  },
+  {
+    name: 'Blizzard',
+    damage: 8,
+    image: `❄️`,
+    type: 'ice',
+  },
+  {
+    name: 'Thunder',
+    damage: 13,
+    image: `⚡`,
+    type: 'lightning',
   },
 ];
 
@@ -169,15 +214,49 @@ const weaponsAvailable = [
   {
     name: 'Mega Sword',
     strength: +5,
-    image:
-      'https://media.istockphoto.com/photos/sword-disposed-by-diagonal-picture-id630052480?k=20&m=630052480&s=612x612&w=0&h=FPu6qhzFivQuHltu4zcH0DA2M7LRBr3rsoUodk8laJ0=',
+    image: `🗡️`,
+  },
+  {
+    name: 'Bow and Arrow',
+    strength: +8,
+    image: `🏹`,
   },
 ];
 
+function createNameContainer() {
+  const enterNameTitle = document.createElement('h2');
+  enterNameTitle.innerText = `Enter Your Hero's Name`;
+  nameInputContainer.appendChild(enterNameTitle);
+
+  const nameInput = document.createElement('input');
+  nameInput.setAttribute('type', 'text');
+  nameInput.setAttribute('id', 'my-input');
+  nameInput.setAttribute('class', 'submit');
+  nameInputContainer.appendChild(nameInput);
+
+  const submitEnteredName = document.createElement('button');
+  submitEnteredName.innerText = 'Submit';
+  submitEnteredName.setAttribute('type', 'submit');
+  submitEnteredName.setAttribute('class', 'submit-name-btn');
+  submitEnteredName.setAttribute('class', 'submit');
+  nameInputContainer.appendChild(submitEnteredName);
+}
+
+function setAttackStrength() {
+  console.log('newCharacter', newCharacter);
+  console.log('enemy', enemyState);
+}
 // Stat of Game
 const newCharacter = new Player((this.name = 'Tom'));
+function setPlayerName() {
+  if (newCharacter.name === '') {
+    console.log('blank name');
 
-function startGame() {}
+    createNameContainer();
+  } else {
+    nameInputContainer.style.display = 'none';
+  }
+}
 
 function setPlayerData() {
   setPlayerImage(newCharacter);
@@ -253,6 +332,7 @@ function spawnNewEnemy() {
     );
 
     enemyState = newEnemy;
+    setAttackStrength();
     return newEnemy;
   }
 }
@@ -314,15 +394,15 @@ const runAway = () => {
 
 function openItemBag() {
   console.log('state.isItemBagOpen', state.isItemBagOpen);
-  
+
   if (state.isItemBagOpen === true) {
-      itemBagContainer.style.display = 'none';
-    }
-    
-    if (state.isItemBagOpen === false) {
-        itemBagContainer.style.display = 'block';
-    }
-    state.isItemBagOpen = !state.isItemBagOpen;
+    itemBagContainer.style.display = 'none';
+  }
+
+  if (state.isItemBagOpen === false) {
+    itemBagContainer.style.display = 'block';
+  }
+  state.isItemBagOpen = !state.isItemBagOpen;
 }
 
 function setInvintoryItems() {
@@ -359,7 +439,7 @@ function setInvintoryItems() {
   closeButton.innerText = 'Close';
   closeButton.addEventListener('click', () => {
     itemBagContainer.style.display = 'none';
-
+    state.isItemBagOpen = !state.isItemBagOpen;
   });
   itemBagContainer.appendChild(closeButton);
 }
@@ -386,11 +466,15 @@ function refreshStats() {
   playerkillBar.innerText = `Kills: ${newCharacter.kills}`;
 }
 
+function startingConditions() {
+}
+
 function run() {
+  setPlayerName();
   setPlayerData();
   setStartingLevel();
   setInvintoryItems();
-  startGame();
+  startingConditions()
 }
 
 run();

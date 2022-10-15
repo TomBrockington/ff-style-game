@@ -5,10 +5,19 @@
   list-style-type: none;
 }
 
+body {
+    background-color: lightsteelblue;
+}
+
+input {
+  text-align: center;
+}
+
 .container {
   padding: 1rem;
-  border: lightsalmon 2px solid;
+  border: lightsalmon 5px solid;
   height: 100vh;
+  border-radius: 4px;
 }
 
 /* LEVEL INFO */
@@ -30,7 +39,7 @@
   height: 500px;
   z-index: -1;
   border-radius: 12px;
-  border: 2px solid black;
+  border: 4px solid black;
 }
 
 /* TURN BUTTON */
@@ -38,19 +47,35 @@
 #nextTurn {
   display: flex;
   justify-content: center;
-  padding-top: 1rem;
 }
 
 #nextTurn button {
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 12px;
   border: 1px solid black;
 }
 
 /* PLAYER INFO */
 
+.player-setname-container {
+  border: 4px solid black;
+  border-radius: 12px;
+  z-index: 5;
+  position: absolute;
+  top: 40%;
+  left: 37%;
+  background-color: lightblue;
+  display: grid;
+  padding: 2rem;
+  gap: 0.5rem;
+}
+
+.submit {
+  height: 50px;
+}
+
 .player-info-container {
-  border: 2px solid black;
+  border: 4px solid black;
   border-radius: 12px;
   height: auto;
   width: 100%;
@@ -67,7 +92,7 @@
   border-radius: 12px;
   z-index: 1;
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   left: 20px;
 }
 
@@ -75,13 +100,13 @@
   width: 100%;
   height: 300px;
   border-radius: 12px;
-  border: 2px solid black;
+  border: 8px solid gold;
 }
 
 /* ITEMS CONTAINER */
 
-#item-bag-container {
-  border: 2px solid black;
+#item-bag-container, #magic-scroll-container {
+  border: 4px solid black;
   border-radius: 12px;
   height: auto;
   margin-top: 1rem;
@@ -105,7 +130,8 @@
 /* BUTTONS */
 
 .action-container {
-  border: 2px solid orange;
+  border: 4px solid orange;
+  background: lightcoral;
   border-radius: 12px;
   padding: 1rem;
   margin-top: 1rem;
@@ -137,7 +163,7 @@
 .enemy-image {
   width: 500px;
   height: 300px;
-  border: 2px solid black;
+  border: 8px solid red;
   border-radius: 12px;
   position: absolute;
   right: 50px;
@@ -157,7 +183,7 @@
 
 .enemy-health-bar {
   background: lightsalmon;
-  border: 2px solid black;
+  border: 4px solid black;
   border-radius: 12px;
   padding: 0.5rem 1rem;
 }
