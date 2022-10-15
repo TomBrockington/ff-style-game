@@ -314,15 +314,15 @@ const runAway = () => {
 
 function openItemBag() {
   console.log('state.isItemBagOpen', state.isItemBagOpen);
-  state.isItemBagOpen = !state.isItemBagOpen;
-
+  
   if (state.isItemBagOpen === true) {
-    itemBagContainer.style.display = 'none';
-  }
-
-  if (state.isItemBagOpen === false) {
-    itemBagContainer.style.display = 'block';
-  }
+      itemBagContainer.style.display = 'none';
+    }
+    
+    if (state.isItemBagOpen === false) {
+        itemBagContainer.style.display = 'block';
+    }
+    state.isItemBagOpen = !state.isItemBagOpen;
 }
 
 function setInvintoryItems() {
