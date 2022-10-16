@@ -49,7 +49,7 @@ const randomIndexGenerator = (number) => {
 };
 
 let state = {
-  level: 3,
+  level: 1,
   isItemBagOpen: false,
   isMagicBagOpen: false,
   isCurrentTurn: false,
@@ -236,7 +236,6 @@ const levelLocations = [
     image:
       'https://t3.ftcdn.net/jpg/01/44/97/42/360_F_144974295_zwgoD2Z4wl22POM50B5W2045gDVEEDZ4.jpg',
   },
-  
 ];
 
 // WEAPONS
@@ -464,9 +463,7 @@ function openItemBag() {
   }
   state.isItemBagOpen = !state.isItemBagOpen;
 }
-function useSpell() {
-  console.log('using spell');
-}
+
 // BUILD SPELLS
 function setMagicalSpells() {
   console.log('SETTING SPELL');
@@ -520,6 +517,19 @@ function setMagicalSpells() {
     state.isMagicBagOpen = !state.isMagicBagOpen;
   });
   magicBagContainer.appendChild(closeButton);
+}
+function useSpell(spell) {
+  console.log('using spell');
+
+  if (spell.quantity <= 0) {
+    return console.log('out of magic');
+  }
+
+  console.log('spell', spell);
+  spell.quantity--;
+  refreshSpells(spell);
+  attachRefresh();
+  return refreshStats();
 }
 // BUILD INVINTORY
 function setInvintoryItems() {
@@ -607,6 +617,20 @@ function attachRefresh() {
 function refreshStats() {
   playerhealthBar.innerText = `Health: ${newCharacter.health}`;
   playerkillBar.innerText = `Kills: ${newCharacter.kills}`;
+}
+
+function refreshSpells(spell) {
+  console.log('refreshing spells');
+  let magicP = document.getElementById('magicP-item');
+  magicP.innerText =
+    spell.name +
+    `  ` +
+    spell.image +
+    `   ` +
+    `Quantity: ` +
+    spell.quantity +
+    ` Type: ` +
+    spell.type;
 }
 
 function refreshInvintory(item) {
