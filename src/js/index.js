@@ -20,6 +20,9 @@ const enemyImage = document.createElement('img');
 const itemBagContainer = document.createElement('div');
 const itemHeadline = document.createElement('h3');
 
+const magicBagContainer = document.createElement('div');
+const magicHeadline = document.createElement('h3');
+
 const fightButtons = document.createElement('div');
 const buttonA = document.createElement('button');
 const buttonB = document.createElement('button');
@@ -48,8 +51,10 @@ const randomIndexGenerator = (number) => {
 let state = {
   level: 1,
   isItemBagOpen: false,
+  isMagicBagOpen: false,
   isCurrentTurn: false,
   isInBattle: false,
+
 };
 
 let enemyState = {};
@@ -87,11 +92,15 @@ class Player {
         name: 'Mega Sword',
         strength: +5,
         image: `🗡️`,
+        quantity: 10
+
       },
       {
         name: 'Bow and Arrow',
         strength: +8,
         image: `🏹`,
+        quantity: 10
+
       },
     ];
     this.magic = [
@@ -100,18 +109,23 @@ class Player {
         damage: 10,
         image: `🔥`,
         type: 'fire',
+        quantity: 10
+
       },
       {
         name: 'Blizzard',
         damage: 8,
         image: `❄️`,
         type: 'ice',
+        quantity: 10
+
       },
       {
         name: 'Thunder',
         damage: 13,
         image: `⚡`,
         type: 'lightning',
+        quantity: 10
       },
     ];
   }
@@ -263,6 +277,7 @@ function setAttackStrength() {
 }
 // Stat of Game
 const newCharacter = new Player((this.name = 'Tom'));
+
 function setPlayerName() {
   if (newCharacter.name === '') {
     console.log('blank name');
@@ -399,6 +414,8 @@ const attack = () => {
 
 const magic = () => {
   console.log('magic');
+  openMagicBag()
+
 };
 const items = () => {
   openItemBag();
@@ -406,6 +423,17 @@ const items = () => {
 const runAway = () => {
   console.log('run');
 };
+
+function openMagicBag() {
+    if (state.isMagicBagOpen === true) {
+        magicBagContainer.style.display = 'none';
+    }
+    
+    if (state.isMagicBagOpen === false) {
+        magicBagContainer.style.display = 'block';
+    }
+    state.isMagicBagOpen = !state.isMagicBagOpen;
+}
 
 function openItemBag() {
 
@@ -417,8 +445,57 @@ function openItemBag() {
     itemBagContainer.style.display = 'block';
   }
   state.isItemBagOpen = !state.isItemBagOpen;
-}
 
+}
+function useSpell() {
+    console.log('using spell');
+}
+// BUILD SPELLS 
+function setMagicalSpells() {
+    console.log('SETTING SPELL');
+    magicBagContainer.id = 'magic-scroll-container';
+    magicBagContainer.setAttribute('class', 'magic-bag');
+    magicBagContainer.style.display = 'none';
+    mainContainer.appendChild(magicBagContainer);
+  
+    magicHeadline.innerText = 'Magics';
+    magicBagContainer.appendChild(magicHeadline);
+  
+    const magicUl = document.createElement('ul');
+    magicBagContainer.appendChild(magicUl);
+  
+    newCharacter.magic.forEach((spell, index) => {
+      const magicP = document.createElement('p');
+      magicP.id = 'magicP-item'
+      const useMagicButton = document.createElement('button');
+  
+      const magicLi = document.createElement('li');
+      magicLi.setAttribute('class', 'list-item');
+      magicUl.appendChild(magicLi);
+  
+      magicP.innerText = spell.name + `Quantity: ` + spell.quantity;
+  
+      magicLi.appendChild(magicP);
+  
+      // USE ITEM BUTTON
+      useMagicButton.innerText = 'CAST';
+      useMagicButton.onclick = () => { 
+          useSpell(spell)
+      }
+  
+      magicLi.appendChild(useMagicButton);
+    });
+  
+    const closeButton = document.createElement('button');
+    closeButton.setAttribute('class', 'btn');
+    closeButton.setAttribute('class', 'close-btn');
+    closeButton.innerText = 'Close';
+    closeButton.addEventListener('click', () => {
+      magicBagContainer.style.display = 'none';
+      state.isMagicBagOpen = !state.isMagicBagOpen;
+    });
+    magicBagContainer.appendChild(closeButton);
+  }
 // BUILD INVINTORY 
 function setInvintoryItems() {
   itemBagContainer.id = 'item-bag-container';
@@ -502,7 +579,6 @@ function refreshInvintory(item) {
     console.log('refreshing invintory');
     let listP = document.getElementById('listP-item')
     listP.innerText = item.name + `Quantity: ` + item.quantity;
-
 }
 
 function startingConditions() {
@@ -513,6 +589,7 @@ function run() {
   setPlayerData();
   setStartingLevel();
   setInvintoryItems();
+  setMagicalSpells();
   startingConditions()
 }
 

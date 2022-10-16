@@ -103,6 +103,17 @@ input {
   border: 8px solid gold;
 }
 
+/*  MAGIC CONTAINER */
+
+#magic-scroll-container {
+    border: 4px solid black;
+    border-radius: 12px;
+    height: auto;
+    margin-top: 1rem;
+    padding: 1rem;
+    position: relative;
+    display: grid;
+  }
 /* ITEMS CONTAINER */
 
 #item-bag-container, #magic-scroll-container {
