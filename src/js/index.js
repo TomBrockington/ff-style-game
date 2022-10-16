@@ -49,12 +49,11 @@ const randomIndexGenerator = (number) => {
 };
 
 let state = {
-  level: 1,
+  level: 3,
   isItemBagOpen: false,
   isMagicBagOpen: false,
   isCurrentTurn: false,
   isInBattle: false,
-
 };
 
 let enemyState = {};
@@ -71,36 +70,33 @@ class Player {
     this.image =
       'https://migrainecanada.org/wp-content/uploads/2019/07/occipital_nerves.jpg';
     this.items = [
-        {
-            name: 'Potion',
-            desc: 'Health plus 10',
-            type: 'heal',
-            use: 10,
-            quantity: 10
-          },
-          {
-            name: 'Cheese',
-            desc: 'Delicious treat',
-            type: 'food',
-            use: 10,
-            quantity: 10
-
-          },
+      {
+        name: 'Potion',
+        desc: 'Health plus 10',
+        type: 'heal',
+        use: 10,
+        quantity: 10,
+      },
+      {
+        name: 'Cheese',
+        desc: 'Delicious treat',
+        type: 'food',
+        use: 10,
+        quantity: 10,
+      },
     ];
     this.weapons = [
       {
         name: 'Mega Sword',
         strength: +5,
         image: `🗡️`,
-        quantity: 10
-
+        quantity: 10,
       },
       {
         name: 'Bow and Arrow',
         strength: +8,
         image: `🏹`,
-        quantity: 10
-
+        quantity: 10,
       },
     ];
     this.magic = [
@@ -109,23 +105,21 @@ class Player {
         damage: 10,
         image: `🔥`,
         type: 'fire',
-        quantity: 10
-
+        quantity: 10,
       },
       {
         name: 'Blizzard',
         damage: 8,
         image: `❄️`,
         type: 'ice',
-        quantity: 10
-
+        quantity: 10,
       },
       {
         name: 'Thunder',
         damage: 13,
         image: `⚡`,
         type: 'lightning',
-        quantity: 10
+        quantity: 10,
       },
     ];
   }
@@ -230,6 +224,19 @@ const levelLocations = [
     image:
       'https://www.blogdot.tv/wp-content/uploads/2022/05/little-witch-in-the-woods-game-preview-available-today.jpg',
   },
+  {
+    name: 'Spooky Castle',
+    emoji: `🏰`,
+    image:
+      'https://www.scottishtours.co.uk/wwwroot/images/blog/41-Eilean-Donan-Castle.jpg',
+  },
+  {
+    name: 'Sandy Desert',
+    emoji: `🏜️`,
+    image:
+      'https://t3.ftcdn.net/jpg/01/44/97/42/360_F_144974295_zwgoD2Z4wl22POM50B5W2045gDVEEDZ4.jpg',
+  },
+  
 ];
 
 // WEAPONS
@@ -404,6 +411,7 @@ function winEnemyBattle() {
   newCharacter.fights++;
   refreshStats();
 }
+
 // 4 Button options
 const attack = () => {
   console.log('attack');
@@ -412,10 +420,8 @@ const attack = () => {
   enemyState.health = enemyState.health - randomAttackDamage;
   attachRefresh();
 };
-
 const magic = () => {
-  openMagicBag()
-
+  openMagicBag();
 };
 const items = () => {
   openItemBag();
@@ -425,31 +431,29 @@ const runAway = () => {
 };
 
 function openMagicBag() {
+  // only open one bag at a time
+  if (state.isItemBagOpen === true) {
+    state.isItemBagOpen = !state.isItemBagOpen;
+    itemBagContainer.style.display = 'none';
+  }
 
-    // only open one bag at a time
-    if (state.isItemBagOpen === true) {
-        state.isItemBagOpen = !state.isItemBagOpen;
-        itemBagContainer.style.display = 'none';
-    }
+  // set bag from open to closed, viible or not
+  if (state.isMagicBagOpen === true) {
+    magicBagContainer.style.display = 'none';
+  }
 
-    // set bag from open to closed, viible or not
-    if (state.isMagicBagOpen === true) {
-        magicBagContainer.style.display = 'none';
-    }
-    
-    if (state.isMagicBagOpen === false) {
-        magicBagContainer.style.display = 'block';
-    }
-    state.isMagicBagOpen = !state.isMagicBagOpen;
+  if (state.isMagicBagOpen === false) {
+    magicBagContainer.style.display = 'block';
+  }
+  state.isMagicBagOpen = !state.isMagicBagOpen;
 }
 
 function openItemBag() {
-
-    // only open one bag at a time
-    if (state.isMagicBagOpen === true) {
-        state.isMagicBagOpen = !state.isMagicBagOpen;
-        magicBagContainer.style.display = 'none';
-    }
+  // only open one bag at a time
+  if (state.isMagicBagOpen === true) {
+    state.isMagicBagOpen = !state.isMagicBagOpen;
+    magicBagContainer.style.display = 'none';
+  }
 
   if (state.isItemBagOpen === true) {
     itemBagContainer.style.display = 'none';
@@ -459,58 +463,65 @@ function openItemBag() {
     itemBagContainer.style.display = 'block';
   }
   state.isItemBagOpen = !state.isItemBagOpen;
-
 }
 function useSpell() {
-    console.log('using spell');
+  console.log('using spell');
 }
-// BUILD SPELLS 
+// BUILD SPELLS
 function setMagicalSpells() {
-    console.log('SETTING SPELL');
-    magicBagContainer.id = 'magic-scroll-container';
-    magicBagContainer.setAttribute('class', 'magic-bag');
+  console.log('SETTING SPELL');
+  magicBagContainer.id = 'magic-scroll-container';
+  magicBagContainer.setAttribute('class', 'magic-bag');
+  magicBagContainer.style.display = 'none';
+  mainContainer.appendChild(magicBagContainer);
+
+  magicHeadline.innerText = 'Magics';
+  magicBagContainer.appendChild(magicHeadline);
+
+  const magicUl = document.createElement('ul');
+  magicBagContainer.appendChild(magicUl);
+
+  newCharacter.magic.forEach((spell, index) => {
+    const magicP = document.createElement('p');
+    magicP.id = 'magicP-item';
+    const useMagicButton = document.createElement('button');
+
+    const magicLi = document.createElement('li');
+    magicLi.setAttribute('class', 'list-item');
+    magicUl.appendChild(magicLi);
+
+    magicP.innerText =
+      spell.name +
+      `  ` +
+      spell.image +
+      `   ` +
+      `Quantity: ` +
+      spell.quantity +
+      ` Type: ` +
+      spell.type;
+
+    magicLi.appendChild(magicP);
+
+    // USE ITEM BUTTON
+    useMagicButton.innerText = 'CAST';
+    useMagicButton.onclick = () => {
+      useSpell(spell);
+    };
+
+    magicLi.appendChild(useMagicButton);
+  });
+
+  const closeButton = document.createElement('button');
+  closeButton.setAttribute('class', 'btn');
+  closeButton.setAttribute('class', 'close-btn');
+  closeButton.innerText = 'Close';
+  closeButton.addEventListener('click', () => {
     magicBagContainer.style.display = 'none';
-    mainContainer.appendChild(magicBagContainer);
-  
-    magicHeadline.innerText = 'Magics';
-    magicBagContainer.appendChild(magicHeadline);
-  
-    const magicUl = document.createElement('ul');
-    magicBagContainer.appendChild(magicUl);
-  
-    newCharacter.magic.forEach((spell, index) => {
-      const magicP = document.createElement('p');
-      magicP.id = 'magicP-item'
-      const useMagicButton = document.createElement('button');
-  
-      const magicLi = document.createElement('li');
-      magicLi.setAttribute('class', 'list-item');
-      magicUl.appendChild(magicLi);
-  
-      magicP.innerText = spell.name + `  ` + spell.image +  `   ` + `Quantity: ` + spell.quantity + ` Type: ` + spell.type 
-  
-      magicLi.appendChild(magicP);
-  
-      // USE ITEM BUTTON
-      useMagicButton.innerText = 'CAST';
-      useMagicButton.onclick = () => { 
-          useSpell(spell)
-      }
-  
-      magicLi.appendChild(useMagicButton);
-    });
-  
-    const closeButton = document.createElement('button');
-    closeButton.setAttribute('class', 'btn');
-    closeButton.setAttribute('class', 'close-btn');
-    closeButton.innerText = 'Close';
-    closeButton.addEventListener('click', () => {
-      magicBagContainer.style.display = 'none';
-      state.isMagicBagOpen = !state.isMagicBagOpen;
-    });
-    magicBagContainer.appendChild(closeButton);
-  }
-// BUILD INVINTORY 
+    state.isMagicBagOpen = !state.isMagicBagOpen;
+  });
+  magicBagContainer.appendChild(closeButton);
+}
+// BUILD INVINTORY
 function setInvintoryItems() {
   itemBagContainer.id = 'item-bag-container';
   itemBagContainer.setAttribute('class', 'item-bag');
@@ -525,7 +536,7 @@ function setInvintoryItems() {
 
   newCharacter.items.forEach((item, index) => {
     const listP = document.createElement('p');
-    listP.id = 'listP-item'
+    listP.id = 'listP-item';
     const useItemButton = document.createElement('button');
 
     const itemLi = document.createElement('li');
@@ -538,9 +549,9 @@ function setInvintoryItems() {
 
     // USE ITEM BUTTON
     useItemButton.innerText = 'USE';
-    useItemButton.onclick = () => { 
-        useInvintoryItem(item)
-    }
+    useItemButton.onclick = () => {
+      useInvintoryItem(item);
+    };
 
     itemLi.appendChild(useItemButton);
   });
@@ -564,10 +575,10 @@ function useInvintoryItem(item) {
   }
 
   if (item.type === 'heal') {
-    newCharacter.health = newCharacter.health + item.use
-    item.quantity--
-    refreshInvintory(item)
-    return refreshStats()
+    newCharacter.health = newCharacter.health + item.use;
+    item.quantity--;
+    refreshInvintory(item);
+    return refreshStats();
   }
 }
 
@@ -579,12 +590,12 @@ function setStartingLevel() {
   levelContainer.appendChild(imageTag);
 
   const locationNameTag = document.createElement('div');
-  locationNameTag.id = 'location-tag'
+  locationNameTag.id = 'location-tag';
   levelContainer.appendChild(locationNameTag);
 
   const nameSpan = document.createElement('span');
   nameSpan.innerText = `${levelLocations[i].emoji} ~ ${levelLocations[i].name} ~ ${levelLocations[i].emoji}`;
-  nameSpan.id = 'level-name-span'
+  nameSpan.id = 'level-name-span';
   locationNameTag.appendChild(nameSpan);
 }
 
@@ -599,13 +610,12 @@ function refreshStats() {
 }
 
 function refreshInvintory(item) {
-    console.log('refreshing invintory');
-    let listP = document.getElementById('listP-item')
-    listP.innerText = item.name + `Quantity: ` + item.quantity;
+  console.log('refreshing invintory');
+  let listP = document.getElementById('listP-item');
+  listP.innerText = item.name + `Quantity: ` + item.quantity;
 }
 
-function startingConditions() {
-}
+function startingConditions() {}
 
 function run() {
   setPlayerName();
@@ -613,7 +623,7 @@ function run() {
   setStartingLevel();
   setInvintoryItems();
   setMagicalSpells();
-  startingConditions()
+  startingConditions();
 }
 
 run();
