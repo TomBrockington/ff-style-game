@@ -225,7 +225,7 @@ const itemsAvailable = [
 // LEVELS
 const levelLocations = [
   {
-    name: 'CrossRoads',
+    name: 'Crossroads',
     image:
       'https://www.blogdot.tv/wp-content/uploads/2022/05/little-witch-in-the-woods-game-preview-available-today.jpg',
   },
@@ -576,6 +576,15 @@ function setStartingLevel() {
   imageTag.setAttribute('src', levelLocations[i].image);
   imageTag.setAttribute('class', 'level-image');
   levelContainer.appendChild(imageTag);
+
+  const locationNameTag = document.createElement('div');
+  locationNameTag.id = 'location-tag'
+  levelContainer.appendChild(locationNameTag);
+
+  const nameSpan = document.createElement('span');
+  nameSpan.innerText = `⚔️ ~ ${levelLocations[i].name} ~ ⚔️`;
+  nameSpan.id = 'level-name-span'
+  locationNameTag.appendChild(nameSpan);
 }
 
 function attachRefresh() {

@@ -5,8 +5,21 @@
   list-style-type: none;
 }
 
+:root {
+  --main-bg-color: lightsteelblue;
+  --main-container-color: lightsalmon;
+  --info-container-color: brown;
+  --outside-border-color: grey;
+  --main-border-color: black;
+  --item-border-color: green;
+  --hero-border-color: gold;
+  --enemy-border-color: red;
+}
+
 body {
-    background-color: lightsteelblue;
+  background-color: var(--main-bg-color);
+  max-height: 100vh;
+  overflow-y: hidden;
 }
 
 input {
@@ -15,7 +28,7 @@ input {
 
 .container {
   padding: 1rem;
-  border: lightsalmon 5px solid;
+  border: var(--outside-border-color) 5px solid;
   height: 100vh;
   border-radius: 4px;
 }
@@ -39,7 +52,27 @@ input {
   height: 500px;
   z-index: -1;
   border-radius: 12px;
-  border: 4px solid black;
+  border: 4px solid var(--main-border-color);
+}
+
+#location-tag {
+  width: 300px;
+  align-items: center;
+  height: auto;
+  margin: 1rem;
+  padding: 0.2rem;
+  border-radius: 12px;
+  border: 4px solid var(--main-border-color);
+  position: absolute;
+  z-index: 10;
+  background-color: var(--info-container-color);
+  display: grid;
+  place-content: center;
+}
+
+#level-name-span {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 /* TURN BUTTON */
@@ -52,19 +85,19 @@ input {
 #nextTurn button {
   padding: 0.5rem;
   border-radius: 12px;
-  border: 1px solid black;
+  border: 1px solid var(--main-border-color);
 }
 
 /* PLAYER INFO */
 
 .player-setname-container {
-  border: 4px solid black;
+  border: 4px solid var(--main-border-color);
   border-radius: 12px;
   z-index: 5;
   position: absolute;
   top: 40%;
   left: 37%;
-  background-color: lightblue;
+  background-color: var(--main-bg-color);
   display: grid;
   padding: 2rem;
   gap: 0.5rem;
@@ -75,7 +108,8 @@ input {
 }
 
 .player-info-container {
-  border: 4px solid black;
+  background-color: var(--info-container-color);
+  border: 4px solid var(--main-border-color);
   border-radius: 12px;
   height: auto;
   width: 100%;
@@ -100,24 +134,26 @@ input {
   width: 100%;
   height: 300px;
   border-radius: 12px;
-  border: 8px solid gold;
+  border: 8px solid var(--hero-border-color);
 }
 
 /*  MAGIC CONTAINER */
 
 #magic-scroll-container {
-    border: 4px solid black;
-    border-radius: 12px;
-    height: auto;
-    margin-top: 1rem;
-    padding: 1rem;
-    position: relative;
-    display: grid;
-  }
+  border: 4px solid var(--main-border-color);
+  background-color: var(--main-container-color);
+  border-radius: 12px;
+  height: auto;
+  margin-top: 1rem;
+  padding: 1rem;
+  position: relative;
+  display: grid;
+}
 /* ITEMS CONTAINER */
 
-#item-bag-container, #magic-scroll-container {
-  border: 4px solid black;
+#item-bag-container {
+  border: 4px solid var(--main-border-color);
+  background-color: var(--main-container-color);
   border-radius: 12px;
   height: auto;
   margin-top: 1rem;
@@ -173,7 +209,7 @@ input {
 .enemy-image {
   width: 500px;
   height: 300px;
-  border: 8px solid red;
+  border: 8px solid var(--enemy-border-color);
   border-radius: 12px;
   position: absolute;
   right: 50px;
@@ -192,8 +228,8 @@ input {
 }
 
 .enemy-health-bar {
-  background: lightsalmon;
-  border: 4px solid black;
+  background: var(--main-container-color);
+  border: 4px solid var(--main-border-color);
   border-radius: 12px;
   padding: 0.5rem 1rem;
 }
