@@ -164,7 +164,7 @@ input {
 
 .list-item {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .close-btn {

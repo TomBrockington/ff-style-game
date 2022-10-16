@@ -226,6 +226,7 @@ const itemsAvailable = [
 const levelLocations = [
   {
     name: 'Crossroads',
+    emoji: `⚔️`,
     image:
       'https://www.blogdot.tv/wp-content/uploads/2022/05/little-witch-in-the-woods-game-preview-available-today.jpg',
   },
@@ -486,7 +487,7 @@ function setMagicalSpells() {
       magicLi.setAttribute('class', 'list-item');
       magicUl.appendChild(magicLi);
   
-      magicP.innerText = spell.name + `Quantity: ` + spell.quantity;
+      magicP.innerText = spell.name + `  ` + spell.image +  `   ` + `Quantity: ` + spell.quantity + ` Type: ` + spell.type 
   
       magicLi.appendChild(magicP);
   
@@ -531,7 +532,7 @@ function setInvintoryItems() {
     itemLi.setAttribute('class', 'list-item');
     itemUl.appendChild(itemLi);
 
-    listP.innerText = item.name + `Quantity: ` + item.quantity;
+    listP.innerText = item.name + ` ➨ ` + `Quantity: ` + item.quantity;
 
     itemLi.appendChild(listP);
 
@@ -582,7 +583,7 @@ function setStartingLevel() {
   levelContainer.appendChild(locationNameTag);
 
   const nameSpan = document.createElement('span');
-  nameSpan.innerText = `⚔️ ~ ${levelLocations[i].name} ~ ⚔️`;
+  nameSpan.innerText = `${levelLocations[i].emoji} ~ ${levelLocations[i].name} ~ ${levelLocations[i].emoji}`;
   nameSpan.id = 'level-name-span'
   locationNameTag.appendChild(nameSpan);
 }
