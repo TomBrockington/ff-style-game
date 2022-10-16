@@ -413,7 +413,6 @@ const attack = () => {
 };
 
 const magic = () => {
-  console.log('magic');
   openMagicBag()
 
 };
@@ -425,6 +424,14 @@ const runAway = () => {
 };
 
 function openMagicBag() {
+
+    // only open one bag at a time
+    if (state.isItemBagOpen === true) {
+        state.isItemBagOpen = !state.isItemBagOpen;
+        itemBagContainer.style.display = 'none';
+    }
+
+    // set bag from open to closed, viible or not
     if (state.isMagicBagOpen === true) {
         magicBagContainer.style.display = 'none';
     }
@@ -436,6 +443,12 @@ function openMagicBag() {
 }
 
 function openItemBag() {
+
+    // only open one bag at a time
+    if (state.isMagicBagOpen === true) {
+        state.isMagicBagOpen = !state.isMagicBagOpen;
+        magicBagContainer.style.display = 'none';
+    }
 
   if (state.isItemBagOpen === true) {
     itemBagContainer.style.display = 'none';
